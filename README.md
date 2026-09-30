@@ -10,7 +10,13 @@ Coba pake ini. Aku ga jamin anti down, tapi ini ga semaruk Forti dalam menggunak
 ## Ini Apa?
 Intinya ini VPN pengganti Forticlient, ngaturnya lewat browser.
 
-### Changelog
+---
+## ANNOUNCEMENT
+VPN Helper dibuat dengan satu tolok ukur: _fast and reliable_. Seiring migrasi BPS RI ke GlobalProtect, integrasi protokol baru ini sedang diuji hingga batas evaluasi 31 Desember 2026. Apabila aplikasi resmi GlobalProtect pada saat itu terbukti sudah mampu memenuhi standar _fast and reliable_ tersebut secara mandiri, maka fungsi VPN Helper telah usai dan proyek ini akan dipensiunkan (deprecated) karena tujuannya telah tercapai.
+
+---
+
+## Changelog
 
 | Versi | Perubahan |
 | --- | --- |
@@ -22,6 +28,7 @@ Intinya ini VPN pengganti Forticlient, ngaturnya lewat browser.
 | `1.26.0905.lt` | Perbaikan automasi yang kadang gagal berjalan, perbaikan file enkripsi |
 | `1.26.0914.lt` | Menambahkan uji coba akomodasi pengguna ber-OTP |
 | `1.26.0914.lt2` | Implementasi bypass aplikasi. Aplikasi yang koneksinya terputus/timeout gara-gara dialihkan ke VPN Helper bisa dimasukkan ke daftar bypass ini. |
+| `1.26.0924.pc` | Menambahkan fungsi eksperimental untuk VPN GlobalProtect. Fitur ini belum bisa dipakai maksimal mengingat transisi VPN yang masih berjalan di pusat. |
 
 ---
 ## Extras

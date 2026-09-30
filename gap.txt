@@ -1,0 +1,169 @@
+=========================================================
+VPN HELPER — RINGKASAN PROGRESS & CELAH YANG BELUM SELESAI
+Ditulis: 2026-09-27 13:42 WITA
+=========================================================
+
+=== APA YANG SUDAH BERHASIL ===
+
+1. AUTENTIKASI IN-APP (SSO GP)
+   - src/gp_auth.py: GPCustomWebEnginePage.acceptNavigationRequest
+     mencegat URL "globalprotectcallback:" di memori (tidak membuka browser eksternal).
+   - Decode Base64 → ekstrak prelogin-cookie + saml-username.
+   - Token diteruskan ke /api/gp/callback → disimpan ke state["gp_token"].
+
+2. TUNNEL OPENCONNECT MODE GP
+   - src/gp.py: start_gp_tunnel() meluncurkan openconnect dengan:
+     --protocol=gp --os=win --usergroup=gateway:prelogin-cookie
+     --dump-http-traffic (untuk intercept authcookie dari stdout)
+   - Tunnel terbentuk sukses, IP assigned (misal 10.210.0.22).
+   - Split routes terpasang: 10.0.0.0/15, 10.10.11.0/24, 10.60.0.0/16, 10.160.0.0/16,
+     10.10.11.11/32, 10.10.11.12/32.
+
+3. KONFIGURASI ADAPTER POST-TUNNEL
+   - src/vpn.py: configure_tunnel_interface() dipanggil saat "route configuration done":
+     * netsh set metric=1 pada adapter "VPN Helper"
+     * Set-DnsClient ConnectionSpecificSuffix = bps.go.id
+     * Clear-DnsClientCache
+
+4. HIP REPORT — INTERCEPT AUTHCOOKIE (PARTIAL)
+   - src/vpn.py: read_tunnel_output() mencoba intercept authcookie dari stdout openconnect
+     (flag --dump-http-traffic mencetak semua HTTP traffic).
+   - Authcookie format hex (misal: f37d78be3e4f9c407873f9b11b05044d) terlihat di log
+     pada baris body POST getconfig.esp (baris 222 log).
+   - Portal name (GP-Gateway-60-N) juga diintercept dari XML getconfig response
+     dan disimpan ke state["gp_portal"].
+   - src/gp.py: submit_gp_hip_report() kini menggunakan state["gp_authcookie"] dan
+     state["gp_portal"] yang diintercept, bukan prelogin-cookie atau config.GP_HOST.
+
+5. UI STATUS
+   - Status card gateway berubah hijau saat tunnel terbentuk.
+   - Bypass route untuk Rustdesk (rs-ny.rustdesk.com) dipasang otomatis.
+
+=== CELAH YANG BELUM TERSELESAIKAN ===
+
+MASALAH UTAMA: fasih-sm.bps.go.id → DNS_PROBE_POSSIBLE
+
+Root cause yang teridentifikasi (hierarki probabilitas):
+
+--- CELAH 1: AUTHCOOKIE BELUM TERVERIFIKASI DIINTERCEPT SEBELUM HIP DIKIRIM ---
+Status: Belum diuji setelah perubahan terakhir.
+
+Dari log sesi terakhir (13:29):
+- Baris 222 log: openconnect mengirim getconfig.esp dengan body:
+  "authcookie=f37d78be3e4f9c407873f9b11b05044d&portal=GP-Gateway-60-N&..."
+- Baris 412: "Legacy IP route configuration done" (HIP dipanggil di sini)
+- Baris 414: "Peringatan: gp_authcookie tidak ada" — artinya intercept BELUM BERHASIL
+  saat sesi itu karena kode lama masih pakai regex yang constraint ke URL path.
+
+Perubahan terbaru (belum diuji):
+- regex authcookie= sekarang tanpa constraint URL (tangkap dari semua baris)
+- Tapi TIMING masih perlu diverifikasi: apakah baris "authcookie=..." (baris 222 log)
+  muncul SEBELUM "route configuration done" (baris 412)?
+  → Ya, seharusnya: getconfig (baris 222) → hipreportcheck (baris 334) → routing (baris 412).
+  → Intercept harus sudah terjadi sebelum HIP dipanggil.
+
+TODO untuk agen berikutnya:
+- Jalankan koneksi, cek log untuk baris "authcookie GP diintercept dari dump openconnect"
+- Pastikan muncul SEBELUM baris "Adapter 'VPN Helper' dioptimalkan"
+
+--- CELAH 2: HIP REPORT MASIH DITOLAK GATEWAY ---
+Status: Error response dikonfirmasi dari log sesi 13:29.
+
+Dari log baris 419-427:
+  <response status="error">
+    <portal>vpn.bps.go.id</portal>   ← SALAH (harusnya GP-Gateway-60-N)
+    <authcookie>F4MyCB3B...</authcookie>  ← ini adalah prelogin-cookie kita, bukan authcookie!
+
+Analisis:
+- Sesi 13:29 masih pakai prelogin-cookie sebagai authcookie (intercept belum kerja).
+- Portal juga salah (vpn.bps.go.id vs GP-Gateway-60-N).
+- Kedua masalah sudah di-fix di kode terbaru — tapi belum diuji.
+
+Parameter yang benar untuk hipreport.esp (dari observasi openconnect baris 334):
+  authcookie=f37d78be3e4f9c407873f9b11b05044d
+  portal=GP-Gateway-60-N
+  user=gilangprasetyo
+  domain=(empty_domain)
+  computer=localhost   ← openconnect hardcode "localhost", bukan nama PC asli
+  client-ip=10.210.0.22
+  md5=87825f84995059a6e4d9c7ba16cb2b86
+
+PENTING: field "computer" — openconnect mengirim "localhost" ke hipreportcheck,
+tapi kode Python kita mengirim "DESKTOP-1NF095D". Belum jelas apakah server
+memeriksa konsistensi ini. Jika ya, HIP akan tetap ditolak.
+
+TODO untuk agen berikutnya:
+- Ubah computer field di hipreport.esp payload menjadi "localhost" (konsisten dengan openconnect)
+- Atau coba keduanya dan lihat mana yang diterima.
+
+--- CELAH 3: DNS SERVER TIDAK MERESPONS VIA SSL TUNNEL ---
+Status: Belum diverifikasi apakah DNS 10.10.11.11 reachable via tunnel.
+
+Hipotesis: Gateway GP memblokir akses DNS (dan semua traffic internal) jika
+HIP report belum dikirim dengan benar. Setelah HIP berhasil, DNS seharusnya
+mulai merespons.
+
+Cara verifikasi (jalankan saat koneksi aktif):
+  powershell -Command "Resolve-DnsName fasih-sm.bps.go.id -Server 10.10.11.11 -Type A"
+  
+Jika timeout → server DNS masih memblokir (HIP belum diterima)
+Jika resolve → masalah hanya di DNS suffix routing (sudah fix dengan bps.go.id suffix)
+Jika NXDOMAIN → domain tidak ada di DNS internal (unlikely)
+
+--- CELAH 4: ESP/IPSEC vs SSL-ONLY ---
+Status: Structural gap, bukan target perbaikan saat ini.
+
+GP resmi menggunakan ESP/IPSec (UDP 4501 ke vpn-gw02.bps.go.id).
+OpenConnect hanya SSL tunnel. Ini perbedaan fundamental yang mungkin
+menyebabkan perilaku berbeda (performa, routing, dll), tapi DNS
+seharusnya tetap bisa jalan via SSL jika HIP diterima.
+
+=== FILE YANG DIMODIFIKASI ===
+
+src/gp.py:
+  - fetch_gp_authcookie() — ada tapi tidak lagi dipanggil di start_gp_tunnel
+    (prelogin-cookie single-use, tidak boleh dikonsumsi Python sebelum openconnect)
+  - start_gp_tunnel(): tambah --dump-http-traffic, state["gp_authcookie"]=None awal
+  - submit_gp_hip_report(): pakai state["gp_authcookie"] dan state["gp_portal"]
+
+src/vpn.py:
+  - read_tunnel_output(): intercept authcookie dari stdout openconnect
+    (regex: r"authcookie=([a-f0-9]{16,})" dan r"<authcookie>(.*?)</authcookie>")
+  - read_tunnel_output(): intercept portal name dari XML getconfig response
+    (regex: r"<portal>(.*?)</portal>") → state["gp_portal"]
+  - configure_tunnel_interface(): set metric=1, DNS suffix bps.go.id, flush cache
+
+src/app.py:
+  - /api/gp/callback: simpan state["gp_token"] dan state["gp_username"]
+
+src/gp_auth.py:
+  - GPCustomWebEnginePage mencegat globalprotectcallback: URL in-memory
+
+=== LANGKAH SELANJUTNYA UNTUK AGEN BERIKUTNYA ===
+
+STEP 1: Jalankan VPN Helper, connect mode GP, cek log untuk:
+  a) "authcookie GP diintercept dari dump openconnect" — harus ada
+  b) "HIP report response: <response status=\"success\">" — target utama
+  c) Jika masih error, lihat response XML lengkap untuk clue
+
+STEP 2: Jika intercept berhasil tapi HIP masih error:
+  - Coba ubah "computer" field di payload hipreport.esp menjadi "localhost"
+  - Coba tambahkan field "md5" ke payload (md5sum dari hipreportcheck response)
+  - md5 bisa diintercept dari baris: "md5sum 87825f84995059a6e4d9c7ba16cb2b86"
+    di log openconnect → simpan ke state["gp_hip_md5"]
+
+STEP 3: Jika HIP sukses tapi DNS masih probe possible:
+  - Jalankan: nslookup fasih-sm.bps.go.id 10.10.11.11
+  - Jika timeout → tunggu beberapa detik lalu coba lagi (gateway butuh waktu apply policy)
+  - Jika masih timeout → cek apakah route 10.10.11.11/32 terpasang via VPN adapter
+
+=== ENVIRONMENT ===
+
+Gateway: vpn-gw01.bps.go.id:443 (IP: 203.123.60.243)
+Portal name (dari server): GP-Gateway-60-N
+DNS internal: 10.10.11.11, 10.10.11.12
+DNS suffix: bps.go.id
+Adapter VPN: "VPN Helper" (Wintun)
+Username: gilangprasetyo
+PC hostname: DESKTOP-1NF095D
+Target URL: fasih-sm.bps.go.id

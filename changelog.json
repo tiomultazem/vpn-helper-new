@@ -24,5 +24,8 @@
   ],
   "1.26.0914.lt2": [
     "Implementasi bypass aplikasi. Aplikasi yang koneksinya terputus/timeout gara-gara dialihkan ke VPN Helper bisa dimasukkan ke daftar bypass ini."
+  ],
+  "1.26.0924.pc": [
+    "Menambahkan fungsi eksperimental untuk VPN GlobalProtect. Fitur ini belum bisa dipakai maksimal mengingat transisi VPN yang masih berjalan di pusat."
   ]
 }

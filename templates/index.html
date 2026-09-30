@@ -22,10 +22,10 @@
   <header class="header">
     <div class="header-inner">
       <div class="header-brand">
-        <div class="vpn-mode-segmented" id="vpn-mode-container" data-mode="ssl" title="SSL = Fortinet (akses.bps.go.id) | TLS = GlobalProtect (vpn.bps.go.id)">
+        <div class="vpn-mode-segmented" id="vpn-mode-container" data-mode="ssl" title="FORTI = Fortinet (akses.bps.go.id) | GP = GlobalProtect (vpn.bps.go.id)">
           <span class="mode-glider" aria-hidden="true"></span>
-          <button type="button" class="mode-btn active" id="mode-btn-ssl" onclick="setVpnMode('ssl')">SSL</button>
-          <button type="button" class="mode-btn" id="mode-btn-tls" onclick="setVpnMode('tls')">TLS</button>
+          <button type="button" class="mode-btn active" id="mode-btn-ssl" onclick="setVpnMode('ssl')">FORTI</button>
+          <button type="button" class="mode-btn" id="mode-btn-tls" onclick="setVpnMode('tls')">GP</button>
         </div>
         <img class="brand-logo" src="{{ url_for('assets', filename='logo.png') }}" alt="" aria-hidden="true">
         <h1 class="brand-name">VPN Helper</h1>

@@ -1,5 +1,6 @@
 @echo off
 setlocal
+cls
 
 if "%~1"=="--child" goto :main
 start "VPN Helper" cmd /c "%~f0" --child

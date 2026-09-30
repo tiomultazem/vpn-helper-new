@@ -21,3 +21,6 @@ dem.bat
 mini.bat
 *.lnk
 envencr.bat
+artifacts/
+.vscode/
+.gp_session.json

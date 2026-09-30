@@ -189,10 +189,10 @@ function updateStatus(data) {
     setCardState('status-vpn', 'default');
   }
 
-  if (configLoaded) {
-    gatewayText.textContent = 'Config Terbaca';
+  if (configLoaded || (vpnConnected && isGpMode())) {
+    gatewayText.textContent = isGpMode() ? 'Gateway Siap' : 'Config Terbaca';
     gatewayMeta.textContent = [
-      config.assigned_addr ? `IP: ${config.assigned_addr}` : '',
+      (config.assigned_addr || data.assigned_ip) ? `IP: ${config.assigned_addr || data.assigned_ip}` : '',
       Number.isFinite(config.route_count) ? `Routes: ${config.route_count}` : '',
       Array.isArray(config.dns_servers) ? `DNS: ${config.dns_servers.length}` : ''
     ].filter(Boolean).join(' | ') || 'Konfigurasi diterima.';
@@ -217,11 +217,11 @@ function updateStatus(data) {
 
   const btnModeSsl = document.getElementById('mode-btn-ssl');
   const btnModeTls = document.getElementById('mode-btn-tls');
-  const modeLocked = ssoInProgress || vpnConnected;
+  const modeLocked = btnConnect.disabled || !!data.automate_mode || ssoInProgress || vpnConnected;
   if (btnModeSsl) btnModeSsl.disabled = modeLocked;
   if (btnModeTls) btnModeTls.disabled = modeLocked;
 
-  if (connectNotificationPending && configLoaded && !vpnConnected && !tunnelStartRequested) {
+  if (connectNotificationPending && configLoaded && !vpnConnected && !tunnelStartRequested && !isGpMode()) {
     tunnelStartRequested = true;
     apiCall('/api/connect/vpn', {})
       .catch(e => {
@@ -309,9 +309,19 @@ function syncVpnModeUI() {
 }
 
 function setVpnMode(mode) {
-  const isConnected = latestStatusData && (latestStatusData.vpn_connected || latestStatusData.sso_in_progress);
-  if (isConnected) {
-    showToast('Putuskan koneksi sebelum ganti mode.', 'warning');
+  const btnConnect = document.getElementById('btn-vpn-connect');
+  const isLocked = (latestStatusData && (
+    latestStatusData.vpn_connected ||
+    latestStatusData.sso_in_progress ||
+    latestStatusData.automate_mode
+  )) || (btnConnect && btnConnect.disabled);
+
+  if (isLocked) {
+    if (latestStatusData && latestStatusData.automate_mode) {
+      showToast('Matikan toggle Automate sebelum ganti mode.', 'warning');
+    } else {
+      showToast('Putuskan koneksi / tunggu proses selesai sebelum ganti mode.', 'warning');
+    }
     return;
   }
   localStorage.setItem('vpn_mode', mode);
@@ -333,8 +343,8 @@ async function connectVPN() {
   try {
     let data;
     if (isGpMode()) {
-      // Mode TLS: GlobalProtect
-      data = await apiCall('/api/gp/connect', { portal: 'vpn.bps.go.id' });
+      // Mode GP: GlobalProtect
+      data = await apiCall('/api/gp/connect', {});
     } else {
       // Mode SSL: Fortinet
       data = await apiCall('/api/connect/sso', {});

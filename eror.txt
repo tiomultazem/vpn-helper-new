@@ -1,0 +1,35 @@
+﻿3b4b429 | Author: 2026-09-30 15:37:00 +0800 | Commit: 2026-09-30 15:37:00 +0800 | feat(tray): update system tray handling
+d54bbd7 | Author: 2026-09-30 15:36:00 +0800 | Commit: 2026-09-30 15:36:00 +0800 | refactor(config): update configuration management
+1944c22 | Author: 2026-09-30 15:35:00 +0800 | Commit: 2026-09-30 15:35:00 +0800 | fix(vpn): harden process output decoding
+0674075 | Author: 2026-09-30 15:34:00 +0800 | Commit: 2026-09-30 15:34:00 +0800 | fix(gp): enhance hip report sync and esp transport
+1bbde62 | Author: 2026-09-30 15:33:00 +0800 | Commit: 2026-09-30 15:33:00 +0800 | feat(bypass): update routing and bypass rules
+fbc8395 | Author: 2026-09-30 15:32:00 +0800 | Commit: 2026-09-30 15:32:00 +0800 | refactor(app): refine main application flow
+ab67417 | Author: 2026-09-30 15:31:00 +0800 | Commit: 2026-09-30 15:31:00 +0800 | chore(src): update package initialization
+957f2e5 | Author: 2026-09-30 15:30:00 +0800 | Commit: 2026-09-30 15:30:00 +0800 | feat(extension): add extension logo
+f3048c4 | Author: 2026-09-30 08:01:00 +0800 | Commit: 2026-09-30 08:01:00 +0800 | feat(extension): add extension icon
+8afda66 | Author: 2026-09-30 08:00:00 +0800 | Commit: 2026-09-30 08:00:00 +0800 | feat(extension): add manifest config
+503c7f2 | Author: 2026-09-28 19:02:00 +0800 | Commit: 2026-09-28 19:02:00 +0800 | feat: add extension content script
+5f34ed1 | Author: 2026-09-28 19:01:00 +0800 | Commit: 2026-09-28 19:02:00 +0800 | feat: add extension background script
+982bf69 | Author: 2026-09-28 19:00:00 +0800 | Commit: 2026-09-28 19:02:00 +0800 | feat: add gp interceptor userscript
+a9b26e2 | Author: 2026-09-28 15:00:00 +0800 | Commit: 2026-09-28 15:00:00 +0800 | wip(gp): intercept authcookie and portal for hip report
+8d85f3f | Author: 2026-09-28 08:04:00 +0800 | Commit: 2026-09-28 08:04:00 +0800 | add experimental function: globalprotect connection
+8847ed1 | Author: 2026-09-28 08:03:00 +0800 | Commit: 2026-09-28 08:03:00 +0800 | add experimental function: globalprotect connection
+3fba1f0 | Author: 2026-09-28 08:02:00 +0800 | Commit: 2026-09-28 08:02:00 +0800 | add experimental function: globalprotect connection
+6b584f3 | Author: 2026-09-28 08:01:00 +0800 | Commit: 2026-09-28 08:01:00 +0800 | add experimental function: globalprotect connection
+3c0c49d | Author: 2026-09-28 08:00:00 +0800 | Commit: 2026-09-28 08:00:00 +0800 | add experimental function: globalprotect connection
+66e4b6e | Author: 2026-09-25 08:09:00 +0800 | Commit: 2026-09-25 08:09:00 +0800 | add experimental function: globalprotect connection
+d6a8bdf | Author: 2026-09-25 08:08:00 +0800 | Commit: 2026-09-25 08:08:00 +0800 | add experimental function: globalprotect connection
+7a04bb5 | Author: 2026-09-25 08:07:00 +0800 | Commit: 2026-09-25 08:07:00 +0800 | add experimental function: globalprotect connection
+0227ce8 | Author: 2026-09-25 08:06:00 +0800 | Commit: 2026-09-25 08:06:00 +0800 | add experimental function: globalprotect connection
+9f6d54f | Author: 2026-09-25 08:05:00 +0800 | Commit: 2026-09-25 08:05:00 +0800 | add experimental function: globalprotect connection
+0d32577 | Author: 2026-09-25 08:04:00 +0800 | Commit: 2026-09-25 08:04:00 +0800 | add experimental function: globalprotect connection
+5018e0a | Author: 2026-09-25 08:03:00 +0800 | Commit: 2026-09-25 08:03:00 +0800 | add experimental function: globalprotect connection
+5e2ed4c | Author: 2026-09-25 08:02:00 +0800 | Commit: 2026-09-25 08:02:00 +0800 | add experimental function: globalprotect connection
+482f8fb | Author: 2026-09-25 08:01:00 +0800 | Commit: 2026-09-25 08:01:00 +0800 | add experimental function: globalprotect connection
+1881b8d | Author: 2026-09-25 08:00:00 +0800 | Commit: 2026-09-25 08:00:00 +0800 | add experimental function: globalprotect connection
+435f643 | Author: 2026-09-24 16:44:00 +0800 | Commit: 2026-09-24 16:44:00 +0800 | add experimental function: globalprotect connection
+824676c | Author: 2026-09-24 12:08:00 +0800 | Commit: 2026-09-24 12:08:00 +0800 | add experimental function: globalprotect connection
+6636b70 | Author: 2026-09-24 12:07:00 +0800 | Commit: 2026-09-24 12:07:00 +0800 | add experimental function: globalprotect connection
+467bf54 | Author: 2026-09-24 12:06:00 +0800 | Commit: 2026-09-24 12:06:00 +0800 | add experimental function: globalprotect connection
+a95d008 | Author: 2026-09-24 12:05:00 +0800 | Commit: 2026-09-24 12:05:00 +0800 | add experimental function: globalprotect connection
+01678b6 | Author: 2026-09-24 12:04:00 +0800 | Commit: 2026-09-24 12:04:00 +0800 | add experimental function: globalprotect connection

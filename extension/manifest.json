@@ -1,0 +1,32 @@
+{
+  "manifest_version": 3,
+  "name": "VPN Helper GP Interceptor",
+  "version": "1.6",
+  "description": "Mencegat callback GlobalProtect SSO dari halaman BPS dan meneruskannya ke VPN Helper.",
+  "icons": {
+    "16": "logo.png",
+    "48": "logo.png",
+    "128": "logo.png"
+  },
+  "action": {
+    "default_icon": "logo.png",
+    "default_title": "VPN Helper GP Interceptor"
+  },
+  "permissions": [
+    "webNavigation"
+  ],
+  "host_permissions": [
+    "https://*.bps.go.id/*",
+    "http://127.0.0.1:8765/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://*.bps.go.id/*"],
+      "js": ["content.js"],
+      "run_at": "document_start"
+    }
+  ]
+}
