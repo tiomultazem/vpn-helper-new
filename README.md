@@ -12,7 +12,9 @@ Intinya ini VPN pengganti Forticlient, ngaturnya lewat browser.
 
 ---
 ## ANNOUNCEMENT
-VPN Helper dibuat dengan satu tolok ukur: _fast and reliable_. Seiring migrasi BPS RI ke GlobalProtect, integrasi protokol baru ini sedang diuji hingga batas evaluasi 31 Desember 2026. Apabila aplikasi resmi GlobalProtect pada saat itu terbukti sudah mampu memenuhi standar _fast and reliable_ tersebut secara mandiri, maka fungsi VPN Helper telah usai dan proyek ini akan dipensiunkan (deprecated) karena tujuannya telah tercapai.
+Mengakomodir migrasi VPN BPS dari FortiClient ke GlobalProtect, kini VPN Helper tersedia dalam 2 mode: Forti (koneksi menggunakan akses.bps.go.id) dan GP (koneksi menggunakan vpn.bps.go.id) sehingga bila salah satu terbukti down, anda dapat beralih ke mode satunya tanpa meninggalkan aplikasi. Cukup klik tombol di pojok kiri atas untuk memilih mode yang anda mau pakai!
+![VPN Mode Selector](assets/modeselector.png)
+Note: pemilihan akan ter-disable bila VPN connected. Bisa disconnect dulu kalau mau ganti.
 
 ---
 
