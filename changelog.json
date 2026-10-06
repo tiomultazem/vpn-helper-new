@@ -27,5 +27,9 @@
   ],
   "1.26.0924.pc": [
     "Menambahkan fungsi eksperimental untuk VPN GlobalProtect. Fitur ini belum bisa dipakai maksimal mengingat transisi VPN yang masih berjalan di pusat."
+  ],
+  "1.26.1001.pc": [
+    "Penambahan mode koneksi GlobalProtect, mengakomodir migrasi sistem BPS",
+    "Penambahan fitur bypass tunnel untuk web/aplikasi yang diblokir VPN BPS"
   ]
 }
