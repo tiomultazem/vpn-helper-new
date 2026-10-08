@@ -8,13 +8,11 @@ Coba pake ini. Aku ga jamin anti down, tapi ini ga semaruk Forti dalam menggunak
 
 ---
 ## Ini Apa?
-Intinya ini VPN pengganti Forticlient, ngaturnya lewat browser.
+Intinya ini VPN pengganti Forticlient, aplikasinya jalan lewat browser.
 
 ---
 ## ANNOUNCEMENT
-Mengakomodir migrasi VPN BPS dari FortiClient ke GlobalProtect, kini VPN Helper tersedia dalam 2 mode: Forti (koneksi menggunakan akses.bps.go.id) dan GP (koneksi menggunakan vpn.bps.go.id) sehingga bila salah satu terbukti down, anda dapat beralih ke mode satunya tanpa meninggalkan aplikasi. Cukup klik tombol di pojok kiri atas untuk memilih mode yang anda mau pakai!
-![VPN Mode Selector](assets/modeselector.png)
-Note: pemilihan akan ter-disable bila VPN connected. Bisa disconnect dulu kalau mau ganti.
+VPN Helper dibuat dengan satu tolok ukur: _fast and reliable_. Seiring migrasi BPS RI ke GlobalProtect, integrasi protokol baru ini sedang diuji hingga batas evaluasi 31 Desember 2026. Apabila aplikasi resmi GlobalProtect pada saat itu terbukti sudah mampu memenuhi standar _fast and reliable_ tersebut secara mandiri, maka fungsi VPN Helper telah usai dan proyek ini akan dipensiunkan (deprecated) karena tujuannya telah tercapai.
 
 ---
 
@@ -60,8 +58,6 @@ Aplikasi ini dirilis di 19 Mei 2026. sudah melalui berbagai stress test dari beb
 
 3. Install OpenConnect.
 
-   Windows:
-
    `requirements.bat` akan otomatis mendownload installer OpenConnect jika belum terpasang. Namun jika ingin mendownload manual, gunakan link berikut:
    - [Direct OpenConnect 64-bit installer](https://www.infradead.org/openconnect-gui/download/openconnect-gui-1.6.2-win64.exe)
 
@@ -85,30 +81,6 @@ Aplikasi ini dirilis di 19 Mei 2026. sudah melalui berbagai stress test dari beb
 
 
    Kalau pakai lokasi custom, cukup ganti nilai `openconnect_path` di file `.env`.
-
-   Ubuntu/Debian:
-
-   ```bash
-   sudo apt install openconnect
-   ```
-
-   Fedora:
-
-   ```bash
-   sudo dnf install openconnect
-   ```
-
-   Arch:
-
-   ```bash
-   sudo pacman -S openconnect
-   ```
-
-   macOS:
-
-   ```bash
-   brew install openconnect
-   ```
 
 4. Install dependensi Python.
 
@@ -138,13 +110,7 @@ Aplikasi ini dirilis di 19 Mei 2026. sudah melalui berbagai stress test dari beb
    ```bat
    run.bat
    ```
-
-   Mac/Linux:
-
-   ```bash
-   sh run.sh
-   ```
-
+   
 7. Akses di http://localhost:8765
 
 8. Ada 3 status di aplikasi:
