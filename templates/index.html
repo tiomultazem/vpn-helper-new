@@ -80,7 +80,7 @@
       <div class="tab-container">
         <div class="tab-bar">
           <button class="tab-btn active" id="tab-btn-log" onclick="switchTab('log')">Activity Log</button>
-          <button class="tab-btn" id="tab-btn-bypass" onclick="switchTab('bypass')">Split Tunneling</button>
+          <button class="tab-btn" id="tab-btn-bypass" onclick="switchTab('bypass')">Bypass Tunnel</button>
           <div class="tab-actions" id="tab-actions-log">
             <button class="log-btn" id="log-pause-btn" onclick="toggleLogPause()">Pause</button>
             <button class="log-btn" onclick="copyLogs()">Copy</button>
@@ -98,18 +98,35 @@
         </div>
 
         <div class="tab-pane" id="tab-pane-bypass">
-          <div style="padding:1rem 1.25rem; display:flex; flex-direction:column; gap:.75rem; overflow-y:auto; flex:1;">
-            <div class="bypass-header">
-              <div class="bypass-title">Bypass Aplikasi &amp; DNS</div>
-              <label class="switch" title="Aktifkan/nonaktifkan bypass">
-                <input type="checkbox" id="bypass-toggle" onchange="onBypassToggle(this)">
-                <span class="slider"></span>
-              </label>
+          <div class="bypass-layout">
+            <!-- Kolom kiri: kontrol toggle + deskripsi + status -->
+            <div class="bypass-left">
+              <div class="bypass-header">
+                <div class="bypass-title">Bypass Tunnel</div>
+                <label class="switch" title="Aktifkan/nonaktifkan bypass">
+                  <input type="checkbox" id="bypass-toggle" onchange="onBypassToggle(this)">
+                  <span class="slider"></span>
+                </label>
+              </div>
+              <p class="bypass-hint">Aplikasi dan domain yang ditambahkan akan dikecualikan dari tunnel VPN. Mendukung wildcard: <code>*.google.com</code></p>
+              <div class="bypass-status-grid" id="bypass-status-grid">
+                <div class="bypass-status-item">
+                  <span class="bypass-status-label">Interface Bypass</span>
+                  <span class="bypass-status-val" id="bypass-status-iface">—</span>
+                </div>
+                <div class="bypass-status-item">
+                  <span class="bypass-status-label">Gateway Bypass</span>
+                  <span class="bypass-status-val" id="bypass-status-gw">—</span>
+                </div>
+                <div class="bypass-status-item full-row">
+                  <span class="bypass-status-label">Route Aktif</span>
+                  <span class="bypass-status-val" id="bypass-status-routes">—</span>
+                </div>
+              </div>
             </div>
-            <p class="bypass-hint">Aplikasi bypass tidak memakai rute maupun DNS VPN untuk host yang dikonfigurasi. Fitur ini dapat mengurangi perlindungan VPN untuk trafik aplikasi tersebut.</p>
-
-            <div class="bypass-columns">
-              <div class="bypass-col">
+            <!-- Kolom kanan: daftar aplikasi + domain, scrollable -->
+            <div class="bypass-right">
+              <div class="bypass-section">
                 <div class="bypass-col-title">Aplikasi yang Dibypass</div>
                 <ul class="bypass-list" id="bypass-apps-list"></ul>
                 <div class="bypass-add-row">
@@ -117,32 +134,18 @@
                   <button class="btn btn-sm btn-primary" onclick="bypassAddApp()">+ Tambah</button>
                 </div>
               </div>
-              <div class="bypass-col">
+              <div class="bypass-section">
                 <div class="bypass-col-title">Domain Bypass</div>
                 <ul class="bypass-list" id="bypass-domains-list"></ul>
                 <div class="bypass-add-row">
-                  <input class="bypass-input" type="text" id="bypass-domain-input" placeholder="rs-ny.rustdesk.com">
+                  <input class="bypass-input" type="text" id="bypass-domain-input" placeholder="*.google.com / rs-ny.rustdesk.com">
                   <button class="btn btn-sm btn-primary" onclick="bypassAddDomain()">+ Tambah</button>
                 </div>
               </div>
             </div>
-
-            <div class="bypass-status-grid" id="bypass-status-grid">
-              <div class="bypass-status-item">
-                <span class="bypass-status-label">Interface Bypass</span>
-                <span class="bypass-status-val" id="bypass-status-iface">—</span>
-              </div>
-              <div class="bypass-status-item">
-                <span class="bypass-status-label">Gateway Bypass</span>
-                <span class="bypass-status-val" id="bypass-status-gw">—</span>
-              </div>
-              <div class="bypass-status-item">
-                <span class="bypass-status-label">Route Aktif</span>
-                <span class="bypass-status-val" id="bypass-status-routes">—</span>
-              </div>
-            </div>
           </div>
         </div>
+
       </div>
     </div>
   </main>
